@@ -50,25 +50,28 @@ function App() {
         {/* Results */}
         {result && (
           <div className="space-y-8 animate-fade-in">
-            {/* Legacy Summary */}
-            <section>
-              <LegacySummary result={result} />
-            </section>
-
-            {/* Export Buttons */}
+            {/* Export Buttons — outside the PDF capture area */}
             <section className="flex justify-center">
               <ExportButtons result={result} selectedDate={selectedDate} />
             </section>
 
-            {/* Results Table */}
-            <section>
-              <FactorTable result={result} />
-            </section>
+            {/* Printable results section — captured by PDF export */}
+            <div id="results-section" className="space-y-8">
+              {/* Legacy Summary */}
+              <section>
+                <LegacySummary result={result} />
+              </section>
 
-            {/* Charts */}
-            <section>
-              <FactorChart result={result} />
-            </section>
+              {/* Results Table */}
+              <section>
+                <FactorTable result={result} />
+              </section>
+
+              {/* Charts */}
+              <section>
+                <FactorChart result={result} />
+              </section>
+            </div>
           </div>
         )}
 
