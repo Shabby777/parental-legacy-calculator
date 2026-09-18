@@ -1,11 +1,14 @@
 /**
  * Core calculation logic for the Parental Legacy & Life Factors Calculator.
- * 
+ *
  * Uses a seeded PRNG to ensure deterministic results for any given DOB.
- * Mother + Father values always sum to exactly 100.
+ * Sum of all Mother values + Sum of all Father values = 100.
+ *
+ * The min/max ranges define the bounds for EACH individual parent value
+ * (i.e., both Mother and Father values fall within [min, max] for that factor).
  */
 
-// Life factor definitions with min/max total ranges
+// Life factor definitions with min/max for each parent's value
 export const FACTORS = [
   { name: 'Genetic Inheritance', min: 9.333, max: 10.777 },
   { name: 'Constitutional Vitality', min: 8.111, max: 9.111 },
@@ -15,6 +18,11 @@ export const FACTORS = [
   { name: 'Spiritual Lineage', min: 5.011, max: 6.011 },
   { name: 'Soul Connections', min: 5.111, max: 6.222 },
 ];
+
+// Sum of all minimums = 47.121, sum of all maximums = 54.230
+// So Mother total ranges from ~47.1 to ~54.2, and same for Father.
+// Together Mother + Father can range from ~94.2 to ~108.5.
+// We need Mother + Father = 100.
 
 /**
  * Seeded pseudo-random number generator (Lehmer / Park-Miller).
@@ -56,53 +64,106 @@ export function calculateFactors(dateOfBirth) {
   const seed = day * 1000000 + month * 10000 + year;
   const rng = seededRandom(seed);
 
-  // ─── Step 1: Generate raw totals for each factor within [min, max] ───
-  const rawTotals = FACTORS.map((factor) => {
-    const t = rng();
-    return factor.min + t * (factor.max - factor.min);
-  });
+  // ─── Step 1: Generate raw Mother and Father values within [min, max] ───
+  const rawMother = FACTORS.map((f) => f.min + rng() * (f.max - f.min));
+  const rawFather = FACTORS.map((f) => f.min + rng() * (f.max - f.min));
 
-  // ─── Step 2: Normalize totals so they sum to exactly 100 ───
-  const rawSum = rawTotals.reduce((a, b) => a + b, 0);
-  const normalizedTotals = rawTotals.map((val) => (val / rawSum) * 100);
-
-  // ─── Step 3: Clamp each total to [min, max] and re-distribute remainder ───
-  // After proportional scaling, values might technically fall outside their
-  // original narrow ranges. We use an iterative clamping approach.
-  const totals = clampAndRedistribute(normalizedTotals, FACTORS);
-
-  // ─── Step 4: Split each total into Mother & Father values ───
-  const factors = FACTORS.map((factor, i) => {
-    const total = totals[i];
-
-    // Dominant parent gets between 52–60% of the total
-    const dominantShare = 0.52 + rng() * 0.08;
-
-    let mother, father;
+  // ─── Step 2: Ensure dominant parent has higher values per factor ───
+  const mother = [];
+  const father = [];
+  for (let i = 0; i < FACTORS.length; i++) {
     if (isMotherDominant) {
-      mother = round(total * dominantShare);
-      father = round(total - mother);
+      // Mother should be >= Father for each factor
+      mother.push(Math.max(rawMother[i], rawFather[i]));
+      father.push(Math.min(rawMother[i], rawFather[i]));
     } else {
-      father = round(total * dominantShare);
-      mother = round(total - father);
+      // Father should be >= Mother for each factor
+      father.push(Math.max(rawMother[i], rawFather[i]));
+      mother.push(Math.min(rawMother[i], rawFather[i]));
+    }
+  }
+
+  // ─── Step 3: Normalize so Mother total + Father total = 100 ───
+  const allValues = [...mother, ...father];
+  const rawGrandTotal = allValues.reduce((a, b) => a + b, 0);
+  const scale = 100 / rawGrandTotal;
+
+  // Scale all values
+  let scaledMother = mother.map((v) => v * scale);
+  let scaledFather = father.map((v) => v * scale);
+
+  // ─── Step 4: Clamp values to [min, max] and iteratively adjust ───
+  // After scaling, some values might fall outside bounds.
+  // We iteratively clamp and redistribute.
+  for (let iter = 0; iter < 20; iter++) {
+    let excess = 0;
+    let freeCountM = 0;
+    let freeCountF = 0;
+
+    // Clamp Mother values
+    for (let i = 0; i < FACTORS.length; i++) {
+      if (scaledMother[i] < FACTORS[i].min) {
+        excess += FACTORS[i].min - scaledMother[i];
+        scaledMother[i] = FACTORS[i].min;
+      } else if (scaledMother[i] > FACTORS[i].max) {
+        excess -= scaledMother[i] - FACTORS[i].max;
+        scaledMother[i] = FACTORS[i].max;
+      } else {
+        freeCountM++;
+      }
     }
 
+    // Clamp Father values
+    for (let i = 0; i < FACTORS.length; i++) {
+      if (scaledFather[i] < FACTORS[i].min) {
+        excess += FACTORS[i].min - scaledFather[i];
+        scaledFather[i] = FACTORS[i].min;
+      } else if (scaledFather[i] > FACTORS[i].max) {
+        excess -= scaledFather[i] - FACTORS[i].max;
+        scaledFather[i] = FACTORS[i].max;
+      } else {
+        freeCountF++;
+      }
+    }
+
+    if (Math.abs(excess) < 0.0001) break;
+
+    const freeCount = freeCountM + freeCountF;
+    if (freeCount === 0) break;
+
+    const perItem = -excess / freeCount;
+
+    // Distribute to unclamped values
+    for (let i = 0; i < FACTORS.length; i++) {
+      if (scaledMother[i] > FACTORS[i].min && scaledMother[i] < FACTORS[i].max) {
+        scaledMother[i] += perItem;
+      }
+    }
+    for (let i = 0; i < FACTORS.length; i++) {
+      if (scaledFather[i] > FACTORS[i].min && scaledFather[i] < FACTORS[i].max) {
+        scaledFather[i] += perItem;
+      }
+    }
+  }
+
+  // ─── Step 5: Round and build result ───
+  const factors = FACTORS.map((f, i) => {
+    const m = round(scaledMother[i]);
+    const fa = round(scaledFather[i]);
     return {
-      name: factor.name,
-      mother,
-      father,
-      total: round(mother + father),
+      name: f.name,
+      mother: m,
+      father: fa,
+      total: round(m + fa),
     };
   });
 
-  // ─── Step 5: Compute totals ───
-  let motherTotal = factors.reduce((sum, f) => sum + f.mother, 0);
-  let fatherTotal = factors.reduce((sum, f) => sum + f.father, 0);
+  let motherTotal = round(factors.reduce((sum, f) => sum + f.mother, 0));
+  let fatherTotal = round(factors.reduce((sum, f) => sum + f.father, 0));
 
   // Fine-tune to ensure exact sum = 100 (fix floating-point drift)
   const drift = round(100 - (motherTotal + fatherTotal), 3);
   if (drift !== 0) {
-    // Apply drift correction to the last factor's dominant parent
     const lastFactor = factors[factors.length - 1];
     if (isMotherDominant) {
       lastFactor.mother = round(lastFactor.mother + drift);
@@ -110,10 +171,9 @@ export function calculateFactors(dateOfBirth) {
       lastFactor.father = round(lastFactor.father + drift);
     }
     lastFactor.total = round(lastFactor.mother + lastFactor.father);
+    motherTotal = round(factors.reduce((sum, f) => sum + f.mother, 0));
+    fatherTotal = round(factors.reduce((sum, f) => sum + f.father, 0));
   }
-
-  motherTotal = round(factors.reduce((sum, f) => sum + f.mother, 0));
-  fatherTotal = round(factors.reduce((sum, f) => sum + f.father, 0));
 
   const dominantParent = motherTotal >= fatherTotal ? 'Mother' : 'Father';
 
@@ -126,41 +186,4 @@ export function calculateFactors(dateOfBirth) {
     dateOfBirth: dob.toISOString(),
     day,
   };
-}
-
-/**
- * Iteratively clamp values to their [min, max] ranges while
- * keeping the overall sum at 100.
- */
-function clampAndRedistribute(values, factors) {
-  const result = [...values];
-  const n = result.length;
-
-  for (let iter = 0; iter < 10; iter++) {
-    let excess = 0;
-    let freeIndices = [];
-
-    for (let i = 0; i < n; i++) {
-      if (result[i] < factors[i].min) {
-        excess += result[i] - factors[i].min; // negative
-        result[i] = factors[i].min;
-      } else if (result[i] > factors[i].max) {
-        excess += result[i] - factors[i].max; // positive
-        result[i] = factors[i].max;
-      } else {
-        freeIndices.push(i);
-      }
-    }
-
-    if (Math.abs(excess) < 0.0001 || freeIndices.length === 0) break;
-
-    // Distribute excess evenly among unclamped values
-    const perItem = excess / freeIndices.length;
-    for (const idx of freeIndices) {
-      result[idx] += perItem;
-    }
-  }
-
-  // Final rounding
-  return result.map((v) => round(v));
 }
