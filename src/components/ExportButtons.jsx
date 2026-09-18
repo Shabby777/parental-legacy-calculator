@@ -10,41 +10,78 @@ export default function ExportButtons({ result, selectedDate }) {
   const exportPDF = async () => {
     setExporting('pdf');
     try {
-      const html2pdfModule = await import('html2pdf.js');
-      const html2pdf = html2pdfModule.default || html2pdfModule;
+      const { jsPDF } = await import('jspdf');
+      const pdf = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const margin = 16;
+      const columns = [margin, 88, 125, 160];
+      let y = 20;
 
-      const element = document.getElementById('results-section');
-      if (!element) {
-        console.error('PDF export: #results-section element not found');
-        setExporting(null);
-        return;
-      }
-
-      const opt = {
-        margin: [0.5, 0.5, 0.5, 0.5],
-        filename: 'parental-legacy-report.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: {
-          scale: 2,
-          useCORS: true,
-          logging: false,
-          // Use the browser's SVG renderer. Unlike html2canvas's legacy canvas
-          // renderer, it supports Tailwind v4's native oklch() colors.
-          foreignObjectRendering: true,
-          backgroundColor: '#f9fafb',
-          // html2canvas parses the cloned document's html/body background before
-          // it selects a renderer. Tailwind applies oklch() there, so override
-          // only those clone-level backgrounds with a parser-safe color.
-          onclone: (clonedDocument) => {
-            clonedDocument.documentElement.style.backgroundColor = '#f9fafb';
-            clonedDocument.body.style.backgroundColor = '#f9fafb';
-          },
-        },
-        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
+      const addText = (text, x, textY, options = {}) => {
+        pdf.text(String(text), x, textY, options);
       };
 
-      await html2pdf().set(opt).from(element).save();
+      pdf.setFillColor(67, 56, 202);
+      pdf.rect(0, 0, pageWidth, 10, 'F');
+      pdf.setTextColor(31, 41, 55);
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(20);
+      addText('Parental Legacy Report', margin, y);
+      y += 8;
+
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(10);
+      const date = selectedDate ? new Date(selectedDate).toLocaleDateString() : 'Not provided';
+      addText(`Date of birth: ${date}`, margin, y);
+      addText(`Dominant legacy: ${result.dominantParent}`, pageWidth - margin, y, { align: 'right' });
+      y += 12;
+
+      pdf.setFillColor(243, 244, 246);
+      pdf.roundedRect(margin, y - 6, pageWidth - margin * 2, 22, 2, 2, 'F');
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(11);
+      addText('Mother\'s Legacy', margin + 5, y);
+      addText('Father\'s Legacy', pageWidth / 2 + 5, y);
+      pdf.setFontSize(17);
+      addText(result.motherTotal.toFixed(3), margin + 5, y + 9);
+      addText(result.fatherTotal.toFixed(3), pageWidth / 2 + 5, y + 9);
+      y += 29;
+
+      pdf.setFontSize(14);
+      addText('Life Factor Values', margin, y);
+      y += 7;
+
+      pdf.setFillColor(67, 56, 202);
+      pdf.rect(margin, y - 5, pageWidth - margin * 2, 8, 'F');
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(10);
+      ['Factor', 'Mother', 'Father', 'Total'].forEach((heading, index) => addText(heading, columns[index], y));
+      y += 8;
+
+      pdf.setTextColor(31, 41, 55);
+      pdf.setFont('helvetica', 'normal');
+      result.factors.forEach((factor, index) => {
+        if (index % 2 === 0) {
+          pdf.setFillColor(249, 250, 251);
+          pdf.rect(margin, y - 5, pageWidth - margin * 2, 8, 'F');
+        }
+        addText(factor.name, columns[0], y);
+        addText(factor.mother.toFixed(3), columns[1], y);
+        addText(factor.father.toFixed(3), columns[2], y);
+        addText(factor.total.toFixed(3), columns[3], y);
+        y += 8;
+      });
+
+      pdf.setFillColor(229, 231, 235);
+      pdf.rect(margin, y - 5, pageWidth - margin * 2, 8, 'F');
+      pdf.setFont('helvetica', 'bold');
+      addText('TOTAL', columns[0], y);
+      addText(result.motherTotal.toFixed(3), columns[1], y);
+      addText(result.fatherTotal.toFixed(3), columns[2], y);
+      addText(result.grandTotal.toFixed(3), columns[3], y);
+
+      pdf.save('parental-legacy-report.pdf');
     } catch (e) {
       console.error('PDF export failed:', e);
       alert('PDF export failed. Please check the console for details.');
