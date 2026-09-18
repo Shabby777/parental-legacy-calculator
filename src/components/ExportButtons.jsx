@@ -28,54 +28,16 @@ export default function ExportButtons({ result, selectedDate }) {
           scale: 2,
           useCORS: true,
           logging: false,
-          // Tailwind CSS v4 uses oklch() colors which html2canvas cannot parse.
-          // Convert all oklch colors to rgb in the cloned DOM before rendering.
-          onclone: (_doc, clonedEl) => {
-            const canvas = document.createElement('canvas');
-            canvas.width = 1;
-            canvas.height = 1;
-            const ctx = canvas.getContext('2d');
-
-            const convertOklch = (color) => {
-              if (!color || !color.includes('oklch')) return null;
-              ctx.clearRect(0, 0, 1, 1);
-              ctx.fillStyle = 'rgba(0,0,0,0)';
-              ctx.fillStyle = color;
-              ctx.fillRect(0, 0, 1, 1);
-              const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data;
-              if (a === 0) return 'transparent';
-              return a < 255
-                ? `rgba(${r}, ${g}, ${b}, ${(a / 255).toFixed(3)})`
-                : `rgb(${r}, ${g}, ${b})`;
-            };
-
-            const colorProps = [
-              'color', 'background-color', 'border-color',
-              'border-top-color', 'border-right-color',
-              'border-bottom-color', 'border-left-color',
-              'outline-color', 'text-decoration-color',
-            ];
-
-            clonedEl.querySelectorAll('*').forEach((el) => {
-              const cs = window.getComputedStyle(el);
-              for (const prop of colorProps) {
-                const val = cs.getPropertyValue(prop);
-                if (val && val.includes('oklch')) {
-                  const rgb = convertOklch(val);
-                  if (rgb) el.style.setProperty(prop, rgb);
-                }
-              }
-            });
-
-            // Also handle the clonedEl itself
-            const rootCs = window.getComputedStyle(clonedEl);
-            for (const prop of colorProps) {
-              const val = rootCs.getPropertyValue(prop);
-              if (val && val.includes('oklch')) {
-                const rgb = convertOklch(val);
-                if (rgb) clonedEl.style.setProperty(prop, rgb);
-              }
-            }
+          // Use the browser's SVG renderer. Unlike html2canvas's legacy canvas
+          // renderer, it supports Tailwind v4's native oklch() colors.
+          foreignObjectRendering: true,
+          backgroundColor: '#f9fafb',
+          // html2canvas parses the cloned document's html/body background before
+          // it selects a renderer. Tailwind applies oklch() there, so override
+          // only those clone-level backgrounds with a parser-safe color.
+          onclone: (clonedDocument) => {
+            clonedDocument.documentElement.style.backgroundColor = '#f9fafb';
+            clonedDocument.body.style.backgroundColor = '#f9fafb';
           },
         },
         jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },

@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* This app controls the theme by adding .dark to <html>, rather than relying
+   on the operating system's preferred color scheme. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* Custom base styles */
 @layer base {
   body {
