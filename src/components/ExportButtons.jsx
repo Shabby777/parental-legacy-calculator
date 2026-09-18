@@ -10,7 +10,6 @@ export default function ExportButtons({ result, selectedDate }) {
   const exportPDF = async () => {
     setExporting('pdf');
     try {
-      // Dynamic import to avoid CJS/ESM interop issues
       const html2pdfModule = await import('html2pdf.js');
       const html2pdf = html2pdfModule.default || html2pdfModule;
 
@@ -25,7 +24,60 @@ export default function ExportButtons({ result, selectedDate }) {
         margin: [0.5, 0.5, 0.5, 0.5],
         filename: 'parental-legacy-report.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, logging: false },
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          logging: false,
+          // Tailwind CSS v4 uses oklch() colors which html2canvas cannot parse.
+          // Convert all oklch colors to rgb in the cloned DOM before rendering.
+          onclone: (_doc, clonedEl) => {
+            const canvas = document.createElement('canvas');
+            canvas.width = 1;
+            canvas.height = 1;
+            const ctx = canvas.getContext('2d');
+
+            const convertOklch = (color) => {
+              if (!color || !color.includes('oklch')) return null;
+              ctx.clearRect(0, 0, 1, 1);
+              ctx.fillStyle = 'rgba(0,0,0,0)';
+              ctx.fillStyle = color;
+              ctx.fillRect(0, 0, 1, 1);
+              const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data;
+              if (a === 0) return 'transparent';
+              return a < 255
+                ? `rgba(${r}, ${g}, ${b}, ${(a / 255).toFixed(3)})`
+                : `rgb(${r}, ${g}, ${b})`;
+            };
+
+            const colorProps = [
+              'color', 'background-color', 'border-color',
+              'border-top-color', 'border-right-color',
+              'border-bottom-color', 'border-left-color',
+              'outline-color', 'text-decoration-color',
+            ];
+
+            clonedEl.querySelectorAll('*').forEach((el) => {
+              const cs = window.getComputedStyle(el);
+              for (const prop of colorProps) {
+                const val = cs.getPropertyValue(prop);
+                if (val && val.includes('oklch')) {
+                  const rgb = convertOklch(val);
+                  if (rgb) el.style.setProperty(prop, rgb);
+                }
+              }
+            });
+
+            // Also handle the clonedEl itself
+            const rootCs = window.getComputedStyle(clonedEl);
+            for (const prop of colorProps) {
+              const val = rootCs.getPropertyValue(prop);
+              if (val && val.includes('oklch')) {
+                const rgb = convertOklch(val);
+                if (rgb) clonedEl.style.setProperty(prop, rgb);
+              }
+            }
+          },
+        },
         jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
         pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
       };
