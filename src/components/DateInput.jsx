@@ -28,7 +28,7 @@ export default function DateInput({ onDateChange, selectedDate }) {
         className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
       />
       {selectedDate && (
-        <div className="mt-4 p-4 bg-blue-50 dark:bg-gray-750 rounded-lg">
+        <div className="mt-4 p-4 bg-blue-50 dark:bg-gray-700 rounded-lg">
           <p className="text-sm text-gray-600 dark:text-gray-300">Selected Date:</p>
           <p className="text-lg font-medium text-gray-900 dark:text-white">{formattedDate}</p>
           <p className="text-sm mt-2 text-indigo-600 dark:text-indigo-400 font-medium">{dayMessage}</p>
