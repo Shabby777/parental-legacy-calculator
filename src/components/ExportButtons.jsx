@@ -169,6 +169,20 @@ export default function ExportButtons({ result, selectedDate }) {
         result.positiveKarmicTargetTotal,
         result.positiveKarmicGapTotal,
       );
+      addLevelsPage(
+        'Karmic Refinement Sectors',
+        result.karmicRefinementSectors,
+        result.karmicRefinementCurrentTotal,
+        result.karmicRefinementTargetTotal,
+        result.karmicRefinementGapTotal,
+      );
+      addLevelsPage(
+        'Karmic Balancing',
+        result.karmicBalancing,
+        result.karmicBalancingCurrentTotal,
+        result.karmicBalancingTargetTotal,
+        result.karmicBalancingGapTotal,
+      );
 
       pdf.save('parental-legacy-report.pdf');
     } catch (e) {
@@ -201,7 +215,9 @@ export default function ExportButtons({ result, selectedDate }) {
       };
       const auraCsv = buildLevelsCsv('AURA LEVELS', result.auraLevels, result.auraCurrentTotal, result.auraTargetTotal, result.auraGapTotal);
       const karmicCsv = buildLevelsCsv('POSITIVE KARMIC DEEDS', result.positiveKarmicDeeds, result.positiveKarmicCurrentTotal, result.positiveKarmicTargetTotal, result.positiveKarmicGapTotal);
-      const csv = BOM + headers + rows + totals + chakraHeaders + chakraRows + chakraTotals + auraCsv + karmicCsv;
+      const karmicRefinementCsv = buildLevelsCsv('KARMIC REFINEMENT SECTORS', result.karmicRefinementSectors, result.karmicRefinementCurrentTotal, result.karmicRefinementTargetTotal, result.karmicRefinementGapTotal);
+      const karmicBalancingCsv = buildLevelsCsv('KARMIC BALANCING', result.karmicBalancing, result.karmicBalancingCurrentTotal, result.karmicBalancingTargetTotal, result.karmicBalancingGapTotal);
+      const csv = BOM + headers + rows + totals + chakraHeaders + chakraRows + chakraTotals + auraCsv + karmicCsv + karmicRefinementCsv + karmicBalancingCsv;
 
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);

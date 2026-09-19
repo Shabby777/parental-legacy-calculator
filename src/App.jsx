@@ -96,6 +96,28 @@ function App() {
                 />
               </section>
 
+              <section>
+                <LevelsTable
+                  title="KARMIC REFINEMENT SECTORS"
+                  // description="Current status is 39.178% of the corresponding Chakra and Aura current-status values combined; target level is 135% of current status."
+                  levels={result.karmicRefinementSectors}
+                  currentTotal={result.karmicRefinementCurrentTotal}
+                  targetTotal={result.karmicRefinementTargetTotal}
+                  gapTotal={result.karmicRefinementGapTotal}
+                />
+              </section>
+
+              <section>
+                <LevelsTable
+                  title="KARMIC BALANCING"
+                  // description="Current status is the average of the corresponding Chakra and Aura current-status values; target level is 135% of current status."
+                  levels={result.karmicBalancing}
+                  currentTotal={result.karmicBalancingCurrentTotal}
+                  targetTotal={result.karmicBalancingTargetTotal}
+                  gapTotal={result.karmicBalancingGapTotal}
+                />
+              </section>
+
               {/* Charts */}
               <section>
                 <FactorChart result={result} />

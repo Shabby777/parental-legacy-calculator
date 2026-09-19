@@ -52,6 +52,26 @@ export const POSITIVE_KARMIC_DEEDS = [
   'Truth Recognition',
 ];
 
+export const KARMIC_REFINEMENT_SECTORS = [
+  'Anger Management',
+  'Mental Flexibility',
+  'Truthfulness',
+  'Financial Ethics',
+  'Mental Peace',
+  'Physical Care',
+  'Spiritual Connection',
+];
+
+export const KARMIC_BALANCING = [
+  'Removing Curses',
+  'Enhancing Blessings',
+  'Workplace Transformation',
+  'Avoiding Negativity',
+  'Maintaining Virtues',
+  'Positive Affirmations',
+  'Karmic Corrections',
+];
+
 // Sum of all minimums = 47.121, sum of all maximums = 54.230
 // So Mother total ranges from ~47.1 to ~54.2, and same for Father.
 // Together Mother + Father can range from ~94.2 to ~108.5.
@@ -255,6 +275,36 @@ export function calculateFactors(dateOfBirth) {
   const positiveKarmicTargetTotal = positiveKarmicDeeds.reduce((sum, deed) => sum + deed.targetLevel, 0);
   const positiveKarmicGapTotal = positiveKarmicDeeds.reduce((sum, deed) => sum + deed.gapToGoal, 0);
 
+  const karmicRefinementSectors = chakraLevels.map((chakra, index) => {
+    const currentStatus = (chakra.currentStatus + auraLevels[index].currentStatus) * 0.39178;
+    const targetLevel = currentStatus * 1.35;
+    return {
+      name: KARMIC_REFINEMENT_SECTORS[index],
+      currentStatus,
+      targetLevel,
+      gapToGoal: targetLevel - currentStatus,
+    };
+  });
+
+  const karmicRefinementCurrentTotal = karmicRefinementSectors.reduce((sum, sector) => sum + sector.currentStatus, 0);
+  const karmicRefinementTargetTotal = karmicRefinementSectors.reduce((sum, sector) => sum + sector.targetLevel, 0);
+  const karmicRefinementGapTotal = karmicRefinementSectors.reduce((sum, sector) => sum + sector.gapToGoal, 0);
+
+  const karmicBalancing = chakraLevels.map((chakra, index) => {
+    const currentStatus = (chakra.currentStatus + auraLevels[index].currentStatus) / 2;
+    const targetLevel = currentStatus * 1.35;
+    return {
+      name: KARMIC_BALANCING[index],
+      currentStatus,
+      targetLevel,
+      gapToGoal: targetLevel - currentStatus,
+    };
+  });
+
+  const karmicBalancingCurrentTotal = karmicBalancing.reduce((sum, item) => sum + item.currentStatus, 0);
+  const karmicBalancingTargetTotal = karmicBalancing.reduce((sum, item) => sum + item.targetLevel, 0);
+  const karmicBalancingGapTotal = karmicBalancing.reduce((sum, item) => sum + item.gapToGoal, 0);
+
   return {
     factors,
     motherTotal,
@@ -273,6 +323,14 @@ export function calculateFactors(dateOfBirth) {
     positiveKarmicCurrentTotal,
     positiveKarmicTargetTotal,
     positiveKarmicGapTotal,
+    karmicRefinementSectors,
+    karmicRefinementCurrentTotal,
+    karmicRefinementTargetTotal,
+    karmicRefinementGapTotal,
+    karmicBalancing,
+    karmicBalancingCurrentTotal,
+    karmicBalancingTargetTotal,
+    karmicBalancingGapTotal,
     dateOfBirth: dob.toISOString(),
     day,
   };
