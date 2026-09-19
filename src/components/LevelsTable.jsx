@@ -5,8 +5,8 @@ export default function LevelsTable({ title, description, levels, currentTotal, 
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 overflow-hidden">
-      <h2 className="text-2xl font-bold mb-2 text-gray-800 dark:text-white">{title}</h2>
-      <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">{description}</p>
+      <h2 className={`text-2xl font-bold ${description ? 'mb-2' : 'mb-6'} text-gray-800 dark:text-white`}>{title}</h2>
+      {description && <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">{description}</p>}
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>

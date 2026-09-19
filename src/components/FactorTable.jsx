@@ -6,7 +6,7 @@ export default function FactorTable({ result }) {
   const { factors, motherTotal, fatherTotal, grandTotal } = result;
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mt-8 overflow-hidden">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 overflow-hidden">
       <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Life Factor Values</h2>
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">

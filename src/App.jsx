@@ -29,7 +29,7 @@ function App() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div>
             <h1 className="text-2xl md:text-3xl font-bold gradient-text">
               Parental Legacy Calculator
@@ -43,7 +43,7 @@ function App() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-4 py-8 space-y-8">
+      <main className="max-w-7xl mx-auto px-4 py-8 space-y-8">
         {/* Date Input */}
         <section className="flex justify-center">
           <DateInput onDateChange={handleDateChange} selectedDate={selectedDate} />
@@ -64,209 +64,212 @@ function App() {
                 <LegacySummary result={result} />
               </section>
 
-              {/* Results Table */}
-              <section>
-                <FactorTable result={result} />
-              </section>
+              {/* 2-Column Tables Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+                {/* Results Table */}
+                <section>
+                  <FactorTable result={result} />
+                </section>
 
-              {/* Chakra Levels Table */}
-              <section>
-                <ChakraLevelsTable result={result} />
-              </section>
+                {/* Chakra Levels Table */}
+                <section>
+                  <ChakraLevelsTable result={result} />
+                </section>
 
-              <section>
-                <LevelsTable
-                  title="AURA LEVELS"
-                  // description="Current status is 38.332% of each parental legacy factor; target level is 135% of current status."
-                  levels={result.auraLevels}
-                  currentTotal={result.auraCurrentTotal}
-                  targetTotal={result.auraTargetTotal}
-                  gapTotal={result.auraGapTotal}
-                />
-              </section>
+                <section>
+                  <LevelsTable
+                    title="AURA LEVELS"
+                    // description="Current status is 38.332% of each parental legacy factor; target level is 135% of current status."
+                    levels={result.auraLevels}
+                    currentTotal={result.auraCurrentTotal}
+                    targetTotal={result.auraTargetTotal}
+                    gapTotal={result.auraGapTotal}
+                  />
+                </section>
 
-              <section>
-                <LevelsTable
-                  title="POSITIVE KARMIC DEEDS"
-                  // description="Current status is 41.878% of the corresponding Chakra and Aura current-status values combined; target level is 135% of current status."
-                  levels={result.positiveKarmicDeeds}
-                  currentTotal={result.positiveKarmicCurrentTotal}
-                  targetTotal={result.positiveKarmicTargetTotal}
-                  gapTotal={result.positiveKarmicGapTotal}
-                />
-              </section>
+                <section>
+                  <LevelsTable
+                    title="POSITIVE KARMIC DEEDS"
+                    // description="Current status is 41.878% of the corresponding Chakra and Aura current-status values combined; target level is 135% of current status."
+                    levels={result.positiveKarmicDeeds}
+                    currentTotal={result.positiveKarmicCurrentTotal}
+                    targetTotal={result.positiveKarmicTargetTotal}
+                    gapTotal={result.positiveKarmicGapTotal}
+                  />
+                </section>
 
-              <section>
-                <LevelsTable
-                  title="KARMIC REFINEMENT SECTORS"
-                  // description="Current status is 39.178% of the corresponding Chakra and Aura current-status values combined; target level is 135% of current status."
-                  levels={result.karmicRefinementSectors}
-                  currentTotal={result.karmicRefinementCurrentTotal}
-                  targetTotal={result.karmicRefinementTargetTotal}
-                  gapTotal={result.karmicRefinementGapTotal}
-                />
-              </section>
+                <section>
+                  <LevelsTable
+                    title="KARMIC REFINEMENT SECTORS"
+                    // description="Current status is 39.178% of the corresponding Chakra and Aura current-status values combined; target level is 135% of current status."
+                    levels={result.karmicRefinementSectors}
+                    currentTotal={result.karmicRefinementCurrentTotal}
+                    targetTotal={result.karmicRefinementTargetTotal}
+                    gapTotal={result.karmicRefinementGapTotal}
+                  />
+                </section>
 
-              <section>
-                <LevelsTable
-                  title="KARMIC BALANCING"
-                  // description="Current status is the average of the corresponding Chakra and Aura current-status values; target level is 135% of current status."
-                  levels={result.karmicBalancing}
-                  currentTotal={result.karmicBalancingCurrentTotal}
-                  targetTotal={result.karmicBalancingTargetTotal}
-                  gapTotal={result.karmicBalancingGapTotal}
-                />
-              </section>
+                <section>
+                  <LevelsTable
+                    title="KARMIC BALANCING"
+                    // description="Current status is the average of the corresponding Chakra and Aura current-status values; target level is 135% of current status."
+                    levels={result.karmicBalancing}
+                    currentTotal={result.karmicBalancingCurrentTotal}
+                    targetTotal={result.karmicBalancingTargetTotal}
+                    gapTotal={result.karmicBalancingGapTotal}
+                  />
+                </section>
 
-              <section>
-                <LevelsTable
-                  title="EARTH (Prithvi) ELEMENT"
-                  levels={result.earthElement}
-                  currentTotal={result.earthElementCurrentTotal}
-                  targetTotal={result.earthElementTargetTotal}
-                  gapTotal={result.earthElementGapTotal}
-                />
-              </section>
+                <section>
+                  <LevelsTable
+                    title="EARTH (Prithvi) ELEMENT"
+                    levels={result.earthElement}
+                    currentTotal={result.earthElementCurrentTotal}
+                    targetTotal={result.earthElementTargetTotal}
+                    gapTotal={result.earthElementGapTotal}
+                  />
+                </section>
 
-              <section>
-                <LevelsTable
-                  title="WATER (Jala) ELEMENT"
-                  levels={result.waterElement}
-                  currentTotal={result.waterElementCurrentTotal}
-                  targetTotal={result.waterElementTargetTotal}
-                  gapTotal={result.waterElementGapTotal}
-                />
-              </section>
+                <section>
+                  <LevelsTable
+                    title="WATER (Jala) ELEMENT"
+                    levels={result.waterElement}
+                    currentTotal={result.waterElementCurrentTotal}
+                    targetTotal={result.waterElementTargetTotal}
+                    gapTotal={result.waterElementGapTotal}
+                  />
+                </section>
 
-              <section>
-                <LevelsTable
-                  title="FIRE (Agni) ELEMENT"
-                  levels={result.fireElement}
-                  currentTotal={result.fireElementCurrentTotal}
-                  targetTotal={result.fireElementTargetTotal}
-                  gapTotal={result.fireElementGapTotal}
-                />
-              </section>
+                <section>
+                  <LevelsTable
+                    title="FIRE (Agni) ELEMENT"
+                    levels={result.fireElement}
+                    currentTotal={result.fireElementCurrentTotal}
+                    targetTotal={result.fireElementTargetTotal}
+                    gapTotal={result.fireElementGapTotal}
+                  />
+                </section>
 
-              <section>
-                <LevelsTable
-                  title="AIR (Vayu) ELEMENT"
-                  levels={result.airElement}
-                  currentTotal={result.airElementCurrentTotal}
-                  targetTotal={result.airElementTargetTotal}
-                  gapTotal={result.airElementGapTotal}
-                />
-              </section>
+                <section>
+                  <LevelsTable
+                    title="AIR (Vayu) ELEMENT"
+                    levels={result.airElement}
+                    currentTotal={result.airElementCurrentTotal}
+                    targetTotal={result.airElementTargetTotal}
+                    gapTotal={result.airElementGapTotal}
+                  />
+                </section>
 
-              <section>
-                <LevelsTable
-                  title="ETHER (Akasha) ELEMENT"
-                  levels={result.etherElement}
-                  currentTotal={result.etherElementCurrentTotal}
-                  targetTotal={result.etherElementTargetTotal}
-                  gapTotal={result.etherElementGapTotal}
-                />
-              </section>
+                <section>
+                  <LevelsTable
+                    title="ETHER (Akasha) ELEMENT"
+                    levels={result.etherElement}
+                    currentTotal={result.etherElementCurrentTotal}
+                    targetTotal={result.etherElementTargetTotal}
+                    gapTotal={result.etherElementGapTotal}
+                  />
+                </section>
 
-              <section>
-                <LevelsTable
-                  title="TIME (Kala) ELEMENT"
-                  levels={result.timeElement}
-                  currentTotal={result.timeElementCurrentTotal}
-                  targetTotal={result.timeElementTargetTotal}
-                  gapTotal={result.timeElementGapTotal}
-                />
-              </section>
+                <section>
+                  <LevelsTable
+                    title="TIME (Kala) ELEMENT"
+                    levels={result.timeElement}
+                    currentTotal={result.timeElementCurrentTotal}
+                    targetTotal={result.timeElementTargetTotal}
+                    gapTotal={result.timeElementGapTotal}
+                  />
+                </section>
 
-              <section>
-                <LevelsTable
-                  title="SOUL (Atman) ELEMENT"
-                  levels={result.soulElement}
-                  currentTotal={result.soulElementCurrentTotal}
-                  targetTotal={result.soulElementTargetTotal}
-                  gapTotal={result.soulElementGapTotal}
-                />
-              </section>
+                <section>
+                  <LevelsTable
+                    title="SOUL (Atman) ELEMENT"
+                    levels={result.soulElement}
+                    currentTotal={result.soulElementCurrentTotal}
+                    targetTotal={result.soulElementTargetTotal}
+                    gapTotal={result.soulElementGapTotal}
+                  />
+                </section>
 
-              <section>
-                <LevelsTable
-                  title="ROOT CHAKRA"
-                  levels={result.rootChakra}
-                  currentTotal={result.rootChakraCurrentTotal}
-                  targetTotal={result.rootChakraTargetTotal}
-                  gapTotal={result.rootChakraGapTotal}
-                />
-              </section>
+                <section>
+                  <LevelsTable
+                    title="ROOT CHAKRA"
+                    levels={result.rootChakra}
+                    currentTotal={result.rootChakraCurrentTotal}
+                    targetTotal={result.rootChakraTargetTotal}
+                    gapTotal={result.rootChakraGapTotal}
+                  />
+                </section>
 
-              <section>
-                <LevelsTable
-                  title="SACRAL CHAKRA"
-                  levels={result.sacralChakra}
-                  currentTotal={result.sacralChakraCurrentTotal}
-                  targetTotal={result.sacralChakraTargetTotal}
-                  gapTotal={result.sacralChakraGapTotal}
-                />
-              </section>
+                <section>
+                  <LevelsTable
+                    title="SACRAL CHAKRA"
+                    levels={result.sacralChakra}
+                    currentTotal={result.sacralChakraCurrentTotal}
+                    targetTotal={result.sacralChakraTargetTotal}
+                    gapTotal={result.sacralChakraGapTotal}
+                  />
+                </section>
 
-              <section>
-                <LevelsTable
-                  title="SOLAR PLEXUS CHAKRA"
-                  levels={result.solarPlexusChakra}
-                  currentTotal={result.solarPlexusChakraCurrentTotal}
-                  targetTotal={result.solarPlexusChakraTargetTotal}
-                  gapTotal={result.solarPlexusChakraGapTotal}
-                />
-              </section>
+                <section>
+                  <LevelsTable
+                    title="SOLAR PLEXUS CHAKRA"
+                    levels={result.solarPlexusChakra}
+                    currentTotal={result.solarPlexusChakraCurrentTotal}
+                    targetTotal={result.solarPlexusChakraTargetTotal}
+                    gapTotal={result.solarPlexusChakraGapTotal}
+                  />
+                </section>
 
-              <section>
-                <LevelsTable
-                  title="HEART CHAKRA"
-                  levels={result.heartChakra}
-                  currentTotal={result.heartChakraCurrentTotal}
-                  targetTotal={result.heartChakraTargetTotal}
-                  gapTotal={result.heartChakraGapTotal}
-                />
-              </section>
+                <section>
+                  <LevelsTable
+                    title="HEART CHAKRA"
+                    levels={result.heartChakra}
+                    currentTotal={result.heartChakraCurrentTotal}
+                    targetTotal={result.heartChakraTargetTotal}
+                    gapTotal={result.heartChakraGapTotal}
+                  />
+                </section>
 
-              <section>
-                <LevelsTable
-                  title="THROAT CHAKRA"
-                  levels={result.throatChakra}
-                  currentTotal={result.throatChakraCurrentTotal}
-                  targetTotal={result.throatChakraTargetTotal}
-                  gapTotal={result.throatChakraGapTotal}
-                />
-              </section>
+                <section>
+                  <LevelsTable
+                    title="THROAT CHAKRA"
+                    levels={result.throatChakra}
+                    currentTotal={result.throatChakraCurrentTotal}
+                    targetTotal={result.throatChakraTargetTotal}
+                    gapTotal={result.throatChakraGapTotal}
+                  />
+                </section>
 
-              <section>
-                <LevelsTable
-                  title="THIRD EYE CHAKRA"
-                  levels={result.thirdEyeChakra}
-                  currentTotal={result.thirdEyeChakraCurrentTotal}
-                  targetTotal={result.thirdEyeChakraTargetTotal}
-                  gapTotal={result.thirdEyeChakraGapTotal}
-                />
-              </section>
+                <section>
+                  <LevelsTable
+                    title="THIRD EYE CHAKRA"
+                    levels={result.thirdEyeChakra}
+                    currentTotal={result.thirdEyeChakraCurrentTotal}
+                    targetTotal={result.thirdEyeChakraTargetTotal}
+                    gapTotal={result.thirdEyeChakraGapTotal}
+                  />
+                </section>
 
-              <section>
-                <LevelsTable
-                  title="CROWN CHAKRA"
-                  levels={result.crownChakra}
-                  currentTotal={result.crownChakraCurrentTotal}
-                  targetTotal={result.crownChakraTargetTotal}
-                  gapTotal={result.crownChakraGapTotal}
-                />
-              </section>
+                <section>
+                  <LevelsTable
+                    title="CROWN CHAKRA"
+                    levels={result.crownChakra}
+                    currentTotal={result.crownChakraCurrentTotal}
+                    targetTotal={result.crownChakraTargetTotal}
+                    gapTotal={result.crownChakraGapTotal}
+                  />
+                </section>
 
-              <section>
-                <LevelsTable
-                  title="THE FOOD SHEATH"
-                  levels={result.foodSheath}
-                  currentTotal={result.foodSheathCurrentTotal}
-                  targetTotal={result.foodSheathTargetTotal}
-                  gapTotal={result.foodSheathGapTotal}
-                />
-              </section>
+                <section className="lg:col-span-2 lg:max-w-2xl lg:mx-auto w-full">
+                  <LevelsTable
+                    title="THE FOOD SHEATH"
+                    levels={result.foodSheath}
+                    currentTotal={result.foodSheathCurrentTotal}
+                    targetTotal={result.foodSheathTargetTotal}
+                    gapTotal={result.foodSheathGapTotal}
+                  />
+                </section>
+              </div>
 
               {/* Charts */}
               <section>
