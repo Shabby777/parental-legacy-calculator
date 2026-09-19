@@ -72,6 +72,86 @@ export const KARMIC_BALANCING = [
   'Karmic Corrections',
 ];
 
+export const EARTH_ELEMENT_FACTORS = [
+  'Stability',
+  'Structure',
+  'Nourishment',
+  'Weight',
+  'Fertility',
+  'Patience',
+  'Manifestation',
+];
+
+export const WATER_ELEMENT_FACTORS = [
+  'Fluidity',
+  'Emotion',
+  'Cohesion',
+  'Memory',
+  'Purification',
+  'Intuition',
+  'Surrender',
+];
+
+export const FIRE_ELEMENT_FACTORS = [
+  'Digestion',
+  'Transformation',
+  'Illumination',
+  'Vitality',
+  'Aspiration',
+  'Willpower',
+  'Purification',
+];
+
+export const AIR_ELEMENT_FACTORS = [
+  'Movement',
+  'Breath',
+  'Communication',
+  'Connection',
+  'Freedom',
+  'Cognition',
+  'Transmission',
+];
+
+export const ETHER_ELEMENT_FACTORS = [
+  'Space',
+  'Stillness',
+  'Receptivity',
+  'Sound',
+  'Perception',
+  'Unity',
+  'Potential',
+];
+
+export const TIME_ELEMENT_FACTORS = [
+  'Sequence',
+  'Rhythm',
+  'Change',
+  'Timing',
+  'Duration',
+  'Memory',
+  'Eternity',
+];
+
+export const SOUL_ELEMENT_FACTORS = [
+  'Awareness',
+  'Witness',
+  'Identity',
+  'Freedom',
+  'Bliss',
+  'Connection',
+  'Purpose',
+];
+
+export const ROOT_CHAKRA_FACTORS = [
+  'Survival',
+  'Grounding',
+  'Security',
+  'Family',
+  'Abundance',
+  'Health',
+  'Presence',
+];
+
 // Sum of all minimums = 47.121, sum of all maximums = 54.230
 // So Mother total ranges from ~47.1 to ~54.2, and same for Father.
 // Together Mother + Father can range from ~94.2 to ~108.5.
@@ -305,6 +385,151 @@ export function calculateFactors(dateOfBirth) {
   const karmicBalancingTargetTotal = karmicBalancing.reduce((sum, item) => sum + item.targetLevel, 0);
   const karmicBalancingGapTotal = karmicBalancing.reduce((sum, item) => sum + item.gapToGoal, 0);
 
+  // === Table 7: EARTH (Prithvi) ELEMENT ===
+  const earthGapMults = [1.055, 1.065, 1.045, 1.015, 1.06, 1.115, 1.115];
+  const earthElement = factors.map((factor, index) => {
+    const currentStatus = factor.total * 0.63;
+    const targetLevel = currentStatus * 0.625;
+    const gapToGoal = targetLevel * earthGapMults[index];
+    return {
+      name: EARTH_ELEMENT_FACTORS[index],
+      currentStatus,
+      targetLevel,
+      gapToGoal,
+    };
+  });
+  const earthElementCurrentTotal = earthElement.reduce((sum, item) => sum + item.currentStatus, 0);
+  const earthElementTargetTotal = earthElement.reduce((sum, item) => sum + item.targetLevel, 0);
+  const earthElementGapTotal = earthElement.reduce((sum, item) => sum + item.gapToGoal, 0);
+
+  // === Table 8: WATER (Jala) ELEMENT ===
+  const waterElement = factors.map((factor, index) => {
+    const currentStatus = factor.total * 0.61;
+    const targetLevel = currentStatus * 0.625;
+    const gapToGoal = targetLevel * 1.115;
+    return {
+      name: WATER_ELEMENT_FACTORS[index],
+      currentStatus,
+      targetLevel,
+      gapToGoal,
+    };
+  });
+  const waterElementCurrentTotal = waterElement.reduce((sum, item) => sum + item.currentStatus, 0);
+  const waterElementTargetTotal = waterElement.reduce((sum, item) => sum + item.targetLevel, 0);
+  const waterElementGapTotal = waterElement.reduce((sum, item) => sum + item.gapToGoal, 0);
+
+  // === Table 9: FIRE (Agni) ELEMENT ===
+  const fireMults = [1.0, 0.81, 0.78, 0.75, 0.72, 0.69, 0.66];
+  const baseFire = factors[0].total * 0.73;
+  const fireElement = fireMults.map((mult, index) => {
+    const currentStatus = baseFire * mult;
+    const targetLevel = currentStatus * 0.625;
+    const gapToGoal = targetLevel * 1.115;
+    return {
+      name: FIRE_ELEMENT_FACTORS[index],
+      currentStatus,
+      targetLevel,
+      gapToGoal,
+    };
+  });
+  const fireElementCurrentTotal = fireElement.reduce((sum, item) => sum + item.currentStatus, 0);
+  const fireElementTargetTotal = fireElement.reduce((sum, item) => sum + item.targetLevel, 0);
+  const fireElementGapTotal = fireElement.reduce((sum, item) => sum + item.gapToGoal, 0);
+
+  // === Table 10: AIR (Vayu) ELEMENT ===
+  const airMults = [1.0, 0.81, 0.78, 0.75, 0.72, 0.69, 0.66];
+  const airGapMults = [1.08, 1.115, 1.09, 1.115, 1.075, 1.115, 1.115];
+  const baseAir = factors[0].total * 0.69;
+  const airElement = airMults.map((mult, index) => {
+    const currentStatus = baseAir * mult;
+    const targetLevel = currentStatus * 0.625;
+    const gapToGoal = targetLevel * airGapMults[index];
+    return {
+      name: AIR_ELEMENT_FACTORS[index],
+      currentStatus,
+      targetLevel,
+      gapToGoal,
+    };
+  });
+  const airElementCurrentTotal = airElement.reduce((sum, item) => sum + item.currentStatus, 0);
+  const airElementTargetTotal = airElement.reduce((sum, item) => sum + item.targetLevel, 0);
+  const airElementGapTotal = airElement.reduce((sum, item) => sum + item.gapToGoal, 0);
+
+  // === Table 11: ETHER (Akasha) ELEMENT ===
+  const etherMults = [1.0, 0.81, 0.78, 0.75, 0.72, 0.69, 0.66];
+  const baseEther = factors[0].total * 0.59;
+  const etherElement = etherMults.map((mult, index) => {
+    const currentStatus = baseEther * mult;
+    const targetLevel = currentStatus * 0.525;
+    const gapToGoal = targetLevel * 1.115;
+    return {
+      name: ETHER_ELEMENT_FACTORS[index],
+      currentStatus,
+      targetLevel,
+      gapToGoal,
+    };
+  });
+  const etherElementCurrentTotal = etherElement.reduce((sum, item) => sum + item.currentStatus, 0);
+  const etherElementTargetTotal = etherElement.reduce((sum, item) => sum + item.targetLevel, 0);
+  const etherElementGapTotal = etherElement.reduce((sum, item) => sum + item.gapToGoal, 0);
+
+  // === Table 12: TIME (Kala) ELEMENT ===
+  const timeMults = [1.0, 0.81, 0.78, 0.75, 0.72, 0.69, 0.66];
+  const timeGapMults = [1.10, 1.115, 1.115, 1.115, 1.115, 1.115, 1.115];
+  const baseTime = factors[0].total * 0.79;
+  const timeElement = timeMults.map((mult, index) => {
+    const currentStatus = baseTime * mult;
+    const targetLevel = currentStatus * 0.625;
+    const gapToGoal = targetLevel * timeGapMults[index];
+    return {
+      name: TIME_ELEMENT_FACTORS[index],
+      currentStatus,
+      targetLevel,
+      gapToGoal,
+    };
+  });
+  const timeElementCurrentTotal = timeElement.reduce((sum, item) => sum + item.currentStatus, 0);
+  const timeElementTargetTotal = timeElement.reduce((sum, item) => sum + item.targetLevel, 0);
+  const timeElementGapTotal = timeElement.reduce((sum, item) => sum + item.gapToGoal, 0);
+
+  // === Table 13: SOUL (Atman) ELEMENT ===
+  const soulMults = [1.0, 0.81, 0.78, 0.75, 0.72, 0.69, 0.66];
+  const soulGapMults = [1.065, 1.115, 1.115, 1.115, 1.115, 1.115, 1.115];
+  const baseSoul = factors[0].total * 0.75;
+  const soulElement = soulMults.map((mult, index) => {
+    const currentStatus = baseSoul * mult;
+    const targetLevel = currentStatus * 0.625;
+    const gapToGoal = targetLevel * soulGapMults[index];
+    return {
+      name: SOUL_ELEMENT_FACTORS[index],
+      currentStatus,
+      targetLevel,
+      gapToGoal,
+    };
+  });
+  const soulElementCurrentTotal = soulElement.reduce((sum, item) => sum + item.currentStatus, 0);
+  const soulElementTargetTotal = soulElement.reduce((sum, item) => sum + item.targetLevel, 0);
+  const soulElementGapTotal = soulElement.reduce((sum, item) => sum + item.gapToGoal, 0);
+
+  // === Table 14: ROOT CHAKRA ===
+  const rootMults = [1.0, 0.81, 0.78, 0.75, 0.72, 0.69, 0.66];
+  const rootGapMults = [1.095, 1.115, 1.115, 1.115, 1.115, 1.115, 1.115];
+  const baseRoot = factors[0].total * 0.78;
+  const rootChakra = rootMults.map((mult, index) => {
+    const currentStatus = baseRoot * mult;
+    const targetLevel = currentStatus * 0.625;
+    const gapToGoal = targetLevel * rootGapMults[index];
+    return {
+      name: ROOT_CHAKRA_FACTORS[index],
+      currentStatus,
+      targetLevel,
+      gapToGoal,
+    };
+  });
+  const rootChakraCurrentTotal = rootChakra.reduce((sum, item) => sum + item.currentStatus, 0);
+  const rootChakraTargetTotal = rootChakra.reduce((sum, item) => sum + item.targetLevel, 0);
+  const rootChakraGapTotal = rootChakra.reduce((sum, item) => sum + item.gapToGoal, 0);
+
   return {
     factors,
     motherTotal,
@@ -331,6 +556,38 @@ export function calculateFactors(dateOfBirth) {
     karmicBalancingCurrentTotal,
     karmicBalancingTargetTotal,
     karmicBalancingGapTotal,
+    earthElement,
+    earthElementCurrentTotal,
+    earthElementTargetTotal,
+    earthElementGapTotal,
+    waterElement,
+    waterElementCurrentTotal,
+    waterElementTargetTotal,
+    waterElementGapTotal,
+    fireElement,
+    fireElementCurrentTotal,
+    fireElementTargetTotal,
+    fireElementGapTotal,
+    airElement,
+    airElementCurrentTotal,
+    airElementTargetTotal,
+    airElementGapTotal,
+    etherElement,
+    etherElementCurrentTotal,
+    etherElementTargetTotal,
+    etherElementGapTotal,
+    timeElement,
+    timeElementCurrentTotal,
+    timeElementTargetTotal,
+    timeElementGapTotal,
+    soulElement,
+    soulElementCurrentTotal,
+    soulElementTargetTotal,
+    soulElementGapTotal,
+    rootChakra,
+    rootChakraCurrentTotal,
+    rootChakraTargetTotal,
+    rootChakraGapTotal,
     dateOfBirth: dob.toISOString(),
     day,
   };

@@ -183,6 +183,62 @@ export default function ExportButtons({ result, selectedDate }) {
         result.karmicBalancingTargetTotal,
         result.karmicBalancingGapTotal,
       );
+      addLevelsPage(
+        'Earth (Prithvi) Element',
+        result.earthElement,
+        result.earthElementCurrentTotal,
+        result.earthElementTargetTotal,
+        result.earthElementGapTotal,
+      );
+      addLevelsPage(
+        'Water (Jala) Element',
+        result.waterElement,
+        result.waterElementCurrentTotal,
+        result.waterElementTargetTotal,
+        result.waterElementGapTotal,
+      );
+      addLevelsPage(
+        'Fire (Agni) Element',
+        result.fireElement,
+        result.fireElementCurrentTotal,
+        result.fireElementTargetTotal,
+        result.fireElementGapTotal,
+      );
+      addLevelsPage(
+        'Air (Vayu) Element',
+        result.airElement,
+        result.airElementCurrentTotal,
+        result.airElementTargetTotal,
+        result.airElementGapTotal,
+      );
+      addLevelsPage(
+        'Ether (Akasha) Element',
+        result.etherElement,
+        result.etherElementCurrentTotal,
+        result.etherElementTargetTotal,
+        result.etherElementGapTotal,
+      );
+      addLevelsPage(
+        'Time (Kala) Element',
+        result.timeElement,
+        result.timeElementCurrentTotal,
+        result.timeElementTargetTotal,
+        result.timeElementGapTotal,
+      );
+      addLevelsPage(
+        'Soul (Atman) Element',
+        result.soulElement,
+        result.soulElementCurrentTotal,
+        result.soulElementTargetTotal,
+        result.soulElementGapTotal,
+      );
+      addLevelsPage(
+        'Root Chakra',
+        result.rootChakra,
+        result.rootChakraCurrentTotal,
+        result.rootChakraTargetTotal,
+        result.rootChakraGapTotal,
+      );
 
       pdf.save('parental-legacy-report.pdf');
     } catch (e) {
@@ -217,7 +273,15 @@ export default function ExportButtons({ result, selectedDate }) {
       const karmicCsv = buildLevelsCsv('POSITIVE KARMIC DEEDS', result.positiveKarmicDeeds, result.positiveKarmicCurrentTotal, result.positiveKarmicTargetTotal, result.positiveKarmicGapTotal);
       const karmicRefinementCsv = buildLevelsCsv('KARMIC REFINEMENT SECTORS', result.karmicRefinementSectors, result.karmicRefinementCurrentTotal, result.karmicRefinementTargetTotal, result.karmicRefinementGapTotal);
       const karmicBalancingCsv = buildLevelsCsv('KARMIC BALANCING', result.karmicBalancing, result.karmicBalancingCurrentTotal, result.karmicBalancingTargetTotal, result.karmicBalancingGapTotal);
-      const csv = BOM + headers + rows + totals + chakraHeaders + chakraRows + chakraTotals + auraCsv + karmicCsv + karmicRefinementCsv + karmicBalancingCsv;
+      const earthCsv = buildLevelsCsv('EARTH (PRITHVI) ELEMENT', result.earthElement, result.earthElementCurrentTotal, result.earthElementTargetTotal, result.earthElementGapTotal);
+      const waterCsv = buildLevelsCsv('WATER (JALA) ELEMENT', result.waterElement, result.waterElementCurrentTotal, result.waterElementTargetTotal, result.waterElementGapTotal);
+      const fireCsv = buildLevelsCsv('FIRE (AGNI) ELEMENT', result.fireElement, result.fireElementCurrentTotal, result.fireElementTargetTotal, result.fireElementGapTotal);
+      const airCsv = buildLevelsCsv('AIR (VAYU) ELEMENT', result.airElement, result.airElementCurrentTotal, result.airElementTargetTotal, result.airElementGapTotal);
+      const etherCsv = buildLevelsCsv('ETHER (AKASHA) ELEMENT', result.etherElement, result.etherElementCurrentTotal, result.etherElementTargetTotal, result.etherElementGapTotal);
+      const timeCsv = buildLevelsCsv('TIME (KALA) ELEMENT', result.timeElement, result.timeElementCurrentTotal, result.timeElementTargetTotal, result.timeElementGapTotal);
+      const soulCsv = buildLevelsCsv('SOUL (ATMAN) ELEMENT', result.soulElement, result.soulElementCurrentTotal, result.soulElementTargetTotal, result.soulElementGapTotal);
+      const rootChakraCsv = buildLevelsCsv('ROOT CHAKRA', result.rootChakra, result.rootChakraCurrentTotal, result.rootChakraTargetTotal, result.rootChakraGapTotal);
+      const csv = BOM + headers + rows + totals + chakraHeaders + chakraRows + chakraTotals + auraCsv + karmicCsv + karmicRefinementCsv + karmicBalancingCsv + earthCsv + waterCsv + fireCsv + airCsv + etherCsv + timeCsv + soulCsv + rootChakraCsv;
 
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);

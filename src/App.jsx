@@ -118,6 +118,86 @@ function App() {
                 />
               </section>
 
+              <section>
+                <LevelsTable
+                  title="EARTH (Prithvi) ELEMENT"
+                  levels={result.earthElement}
+                  currentTotal={result.earthElementCurrentTotal}
+                  targetTotal={result.earthElementTargetTotal}
+                  gapTotal={result.earthElementGapTotal}
+                />
+              </section>
+
+              <section>
+                <LevelsTable
+                  title="WATER (Jala) ELEMENT"
+                  levels={result.waterElement}
+                  currentTotal={result.waterElementCurrentTotal}
+                  targetTotal={result.waterElementTargetTotal}
+                  gapTotal={result.waterElementGapTotal}
+                />
+              </section>
+
+              <section>
+                <LevelsTable
+                  title="FIRE (Agni) ELEMENT"
+                  levels={result.fireElement}
+                  currentTotal={result.fireElementCurrentTotal}
+                  targetTotal={result.fireElementTargetTotal}
+                  gapTotal={result.fireElementGapTotal}
+                />
+              </section>
+
+              <section>
+                <LevelsTable
+                  title="AIR (Vayu) ELEMENT"
+                  levels={result.airElement}
+                  currentTotal={result.airElementCurrentTotal}
+                  targetTotal={result.airElementTargetTotal}
+                  gapTotal={result.airElementGapTotal}
+                />
+              </section>
+
+              <section>
+                <LevelsTable
+                  title="ETHER (Akasha) ELEMENT"
+                  levels={result.etherElement}
+                  currentTotal={result.etherElementCurrentTotal}
+                  targetTotal={result.etherElementTargetTotal}
+                  gapTotal={result.etherElementGapTotal}
+                />
+              </section>
+
+              <section>
+                <LevelsTable
+                  title="TIME (Kala) ELEMENT"
+                  levels={result.timeElement}
+                  currentTotal={result.timeElementCurrentTotal}
+                  targetTotal={result.timeElementTargetTotal}
+                  gapTotal={result.timeElementGapTotal}
+                />
+              </section>
+
+              <section>
+                <LevelsTable
+                  title="SOUL (Atman) ELEMENT"
+                  levels={result.soulElement}
+                  currentTotal={result.soulElementCurrentTotal}
+                  targetTotal={result.soulElementTargetTotal}
+                  gapTotal={result.soulElementGapTotal}
+                />
+              </section>
+
+              <section>
+                <LevelsTable
+                  title="ROOT CHAKRA"
+                  levels={result.rootChakra}
+                  currentTotal={result.rootChakraCurrentTotal}
+                  targetTotal={result.rootChakraTargetTotal}
+                  gapTotal={result.rootChakraGapTotal}
+                />
+              </section>
+
               {/* Charts */}
               <section>
                 <FactorChart result={result} />
