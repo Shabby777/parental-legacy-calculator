@@ -116,6 +116,60 @@ export default function ExportButtons({ result, selectedDate }) {
       addText(result.chakraTargetTotal.toFixed(3), columns[2], y);
       addText(result.chakraGapTotal.toFixed(3), columns[3], y);
 
+      const addLevelsPage = (title, levels, currentTotal, targetTotal, gapTotal) => {
+        pdf.addPage();
+        y = 20;
+        pdf.setTextColor(31, 41, 55);
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(14);
+        addText(title, margin, y);
+        y += 7;
+
+        pdf.setFillColor(109, 40, 217);
+        pdf.rect(margin, y - 5, pageWidth - margin * 2, 8, 'F');
+        pdf.setTextColor(255, 255, 255);
+        pdf.setFontSize(9);
+        ['Life Factor', 'Current', 'Target', 'Gap'].forEach((heading, index) => addText(heading, columns[index], y));
+        y += 8;
+
+        pdf.setTextColor(31, 41, 55);
+        pdf.setFont('helvetica', 'normal');
+        levels.forEach((level, index) => {
+          if (index % 2 === 0) {
+            pdf.setFillColor(249, 250, 251);
+            pdf.rect(margin, y - 5, pageWidth - margin * 2, 8, 'F');
+          }
+          addText(level.name, columns[0], y);
+          addText(level.currentStatus.toFixed(3), columns[1], y);
+          addText(level.targetLevel.toFixed(3), columns[2], y);
+          addText(level.gapToGoal.toFixed(3), columns[3], y);
+          y += 8;
+        });
+
+        pdf.setFillColor(229, 231, 235);
+        pdf.rect(margin, y - 5, pageWidth - margin * 2, 8, 'F');
+        pdf.setFont('helvetica', 'bold');
+        addText('TOTAL', columns[0], y);
+        addText(currentTotal.toFixed(3), columns[1], y);
+        addText(targetTotal.toFixed(3), columns[2], y);
+        addText(gapTotal.toFixed(3), columns[3], y);
+      };
+
+      addLevelsPage(
+        'Aura Levels',
+        result.auraLevels,
+        result.auraCurrentTotal,
+        result.auraTargetTotal,
+        result.auraGapTotal,
+      );
+      addLevelsPage(
+        'Positive Karmic Deeds',
+        result.positiveKarmicDeeds,
+        result.positiveKarmicCurrentTotal,
+        result.positiveKarmicTargetTotal,
+        result.positiveKarmicGapTotal,
+      );
+
       pdf.save('parental-legacy-report.pdf');
     } catch (e) {
       console.error('PDF export failed:', e);
@@ -139,7 +193,15 @@ export default function ExportButtons({ result, selectedDate }) {
         .map((chakra) => `"${chakra.name}",${chakra.currentStatus.toFixed(3)},${chakra.targetLevel.toFixed(3)},${chakra.gapToGoal.toFixed(3)}`)
         .join('\n');
       const chakraTotals = `\n"TOTAL",${result.chakraCurrentTotal.toFixed(3)},${result.chakraTargetTotal.toFixed(3)},${result.chakraGapTotal.toFixed(3)}`;
-      const csv = BOM + headers + rows + totals + chakraHeaders + chakraRows + chakraTotals;
+      const buildLevelsCsv = (title, levels, currentTotal, targetTotal, gapTotal) => {
+        const levelRows = levels
+          .map((level) => `"${level.name}",${level.currentStatus.toFixed(3)},${level.targetLevel.toFixed(3)},${level.gapToGoal.toFixed(3)}`)
+          .join('\n');
+        return `\n\n${title}\nLife Factor,Current Status,Target Level,Gap to Goal\n${levelRows}\n"TOTAL",${currentTotal.toFixed(3)},${targetTotal.toFixed(3)},${gapTotal.toFixed(3)}`;
+      };
+      const auraCsv = buildLevelsCsv('AURA LEVELS', result.auraLevels, result.auraCurrentTotal, result.auraTargetTotal, result.auraGapTotal);
+      const karmicCsv = buildLevelsCsv('POSITIVE KARMIC DEEDS', result.positiveKarmicDeeds, result.positiveKarmicCurrentTotal, result.positiveKarmicTargetTotal, result.positiveKarmicGapTotal);
+      const csv = BOM + headers + rows + totals + chakraHeaders + chakraRows + chakraTotals + auraCsv + karmicCsv;
 
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);

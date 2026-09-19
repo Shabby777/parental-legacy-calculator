@@ -32,6 +32,26 @@ export const CHAKRAS = [
   'Crown Connection',
 ];
 
+export const AURAS = [
+  'Physical Aura',
+  'Vital Energy Field',
+  'Mental-Emotional Field',
+  'Intuitive Wisdom Field',
+  'Bliss Consciousness Field',
+  'Celestial Resonance Field',
+  'Universal Harmony Field',
+];
+
+export const POSITIVE_KARMIC_DEEDS = [
+  'Harmonious Relationships',
+  'Personal Evolution',
+  'Mental Clarity',
+  'Abundance Flow',
+  'Spiritual Alignment',
+  'Environmental Harmony',
+  'Truth Recognition',
+];
+
 // Sum of all minimums = 47.121, sum of all maximums = 54.230
 // So Mother total ranges from ~47.1 to ~54.2, and same for Father.
 // Together Mother + Father can range from ~94.2 to ~108.5.
@@ -205,6 +225,36 @@ export function calculateFactors(dateOfBirth) {
   const chakraTargetTotal = chakraLevels.reduce((sum, chakra) => sum + chakra.targetLevel, 0);
   const chakraGapTotal = chakraLevels.reduce((sum, chakra) => sum + chakra.gapToGoal, 0);
 
+  const auraLevels = factors.map((factor, index) => {
+    const currentStatus = factor.total * 0.38332;
+    const targetLevel = currentStatus * 1.35;
+    return {
+      name: AURAS[index],
+      currentStatus,
+      targetLevel,
+      gapToGoal: targetLevel - currentStatus,
+    };
+  });
+
+  const auraCurrentTotal = auraLevels.reduce((sum, aura) => sum + aura.currentStatus, 0);
+  const auraTargetTotal = auraLevels.reduce((sum, aura) => sum + aura.targetLevel, 0);
+  const auraGapTotal = auraLevels.reduce((sum, aura) => sum + aura.gapToGoal, 0);
+
+  const positiveKarmicDeeds = chakraLevels.map((chakra, index) => {
+    const currentStatus = (chakra.currentStatus + auraLevels[index].currentStatus) * 0.41878;
+    const targetLevel = currentStatus * 1.35;
+    return {
+      name: POSITIVE_KARMIC_DEEDS[index],
+      currentStatus,
+      targetLevel,
+      gapToGoal: targetLevel - currentStatus,
+    };
+  });
+
+  const positiveKarmicCurrentTotal = positiveKarmicDeeds.reduce((sum, deed) => sum + deed.currentStatus, 0);
+  const positiveKarmicTargetTotal = positiveKarmicDeeds.reduce((sum, deed) => sum + deed.targetLevel, 0);
+  const positiveKarmicGapTotal = positiveKarmicDeeds.reduce((sum, deed) => sum + deed.gapToGoal, 0);
+
   return {
     factors,
     motherTotal,
@@ -215,6 +265,14 @@ export function calculateFactors(dateOfBirth) {
     chakraCurrentTotal,
     chakraTargetTotal,
     chakraGapTotal,
+    auraLevels,
+    auraCurrentTotal,
+    auraTargetTotal,
+    auraGapTotal,
+    positiveKarmicDeeds,
+    positiveKarmicCurrentTotal,
+    positiveKarmicTargetTotal,
+    positiveKarmicGapTotal,
     dateOfBirth: dob.toISOString(),
     day,
   };

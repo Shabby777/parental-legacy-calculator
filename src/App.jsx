@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import DateInput from './components/DateInput';
 import FactorTable from './components/FactorTable';
 import ChakraLevelsTable from './components/ChakraLevelsTable';
+import LevelsTable from './components/LevelsTable';
 import FactorChart from './components/FactorChart';
 import LegacySummary from './components/LegacySummary';
 import ExportButtons from './components/ExportButtons';
@@ -71,6 +72,28 @@ function App() {
               {/* Chakra Levels Table */}
               <section>
                 <ChakraLevelsTable result={result} />
+              </section>
+
+              <section>
+                <LevelsTable
+                  title="AURA LEVELS"
+                  // description="Current status is 38.332% of each parental legacy factor; target level is 135% of current status."
+                  levels={result.auraLevels}
+                  currentTotal={result.auraCurrentTotal}
+                  targetTotal={result.auraTargetTotal}
+                  gapTotal={result.auraGapTotal}
+                />
+              </section>
+
+              <section>
+                <LevelsTable
+                  title="POSITIVE KARMIC DEEDS"
+                  // description="Current status is 41.878% of the corresponding Chakra and Aura current-status values combined; target level is 135% of current status."
+                  levels={result.positiveKarmicDeeds}
+                  currentTotal={result.positiveKarmicCurrentTotal}
+                  targetTotal={result.positiveKarmicTargetTotal}
+                  gapTotal={result.positiveKarmicGapTotal}
+                />
               </section>
 
               {/* Charts */}
