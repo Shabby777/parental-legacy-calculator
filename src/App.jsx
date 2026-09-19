@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import DateInput from './components/DateInput';
 import FactorTable from './components/FactorTable';
+import ChakraLevelsTable from './components/ChakraLevelsTable';
 import FactorChart from './components/FactorChart';
 import LegacySummary from './components/LegacySummary';
 import ExportButtons from './components/ExportButtons';
@@ -65,6 +66,11 @@ function App() {
               {/* Results Table */}
               <section>
                 <FactorTable result={result} />
+              </section>
+
+              {/* Chakra Levels Table */}
+              <section>
+                <ChakraLevelsTable result={result} />
               </section>
 
               {/* Charts */}

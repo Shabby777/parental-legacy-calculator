@@ -19,6 +19,19 @@ export const FACTORS = [
   { name: 'Soul Connections', min: 5.111, max: 6.222 },
 ];
 
+// Chakra levels use the corresponding parental-legacy factor total.
+// Per the reference workbook: current status is 40% of the factor total,
+// target level is 135% of current status, and the remaining amount is the gap.
+export const CHAKRAS = [
+  'Root Chakra Stability',
+  'Sacral Chakra Creativity',
+  'Solar Plexus Power',
+  'Heart Chakra Compassion',
+  'Throat Chakra Expression',
+  'Third Eye Intuition',
+  'Crown Connection',
+];
+
 // Sum of all minimums = 47.121, sum of all maximums = 54.230
 // So Mother total ranges from ~47.1 to ~54.2, and same for Father.
 // Together Mother + Father can range from ~94.2 to ~108.5.
@@ -177,12 +190,31 @@ export function calculateFactors(dateOfBirth) {
 
   const dominantParent = motherTotal >= fatherTotal ? 'Mother' : 'Father';
 
+  const chakraLevels = factors.map((factor, index) => {
+    const currentStatus = factor.total * 0.4;
+    const targetLevel = currentStatus * 1.35;
+    return {
+      name: CHAKRAS[index],
+      currentStatus,
+      targetLevel,
+      gapToGoal: targetLevel - currentStatus,
+    };
+  });
+
+  const chakraCurrentTotal = chakraLevels.reduce((sum, chakra) => sum + chakra.currentStatus, 0);
+  const chakraTargetTotal = chakraLevels.reduce((sum, chakra) => sum + chakra.targetLevel, 0);
+  const chakraGapTotal = chakraLevels.reduce((sum, chakra) => sum + chakra.gapToGoal, 0);
+
   return {
     factors,
     motherTotal,
     fatherTotal,
     grandTotal: round(motherTotal + fatherTotal),
     dominantParent,
+    chakraLevels,
+    chakraCurrentTotal,
+    chakraTargetTotal,
+    chakraGapTotal,
     dateOfBirth: dob.toISOString(),
     day,
   };

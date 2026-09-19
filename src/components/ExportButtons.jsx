@@ -81,6 +81,41 @@ export default function ExportButtons({ result, selectedDate }) {
       addText(result.fatherTotal.toFixed(3), columns[2], y);
       addText(result.grandTotal.toFixed(3), columns[3], y);
 
+      y += 14;
+      pdf.setFontSize(14);
+      addText('Chakra Levels', margin, y);
+      y += 7;
+
+      pdf.setFillColor(109, 40, 217);
+      pdf.rect(margin, y - 5, pageWidth - margin * 2, 8, 'F');
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(9);
+      ['Life Factor', 'Current', 'Target', 'Gap'].forEach((heading, index) => addText(heading, columns[index], y));
+      y += 8;
+
+      pdf.setTextColor(31, 41, 55);
+      pdf.setFont('helvetica', 'normal');
+      result.chakraLevels.forEach((chakra, index) => {
+        if (index % 2 === 0) {
+          pdf.setFillColor(249, 250, 251);
+          pdf.rect(margin, y - 5, pageWidth - margin * 2, 8, 'F');
+        }
+        addText(chakra.name, columns[0], y);
+        addText(chakra.currentStatus.toFixed(3), columns[1], y);
+        addText(chakra.targetLevel.toFixed(3), columns[2], y);
+        addText(chakra.gapToGoal.toFixed(3), columns[3], y);
+        y += 8;
+      });
+
+      pdf.setFillColor(229, 231, 235);
+      pdf.rect(margin, y - 5, pageWidth - margin * 2, 8, 'F');
+      pdf.setFont('helvetica', 'bold');
+      addText('TOTAL', columns[0], y);
+      addText(result.chakraCurrentTotal.toFixed(3), columns[1], y);
+      addText(result.chakraTargetTotal.toFixed(3), columns[2], y);
+      addText(result.chakraGapTotal.toFixed(3), columns[3], y);
+
       pdf.save('parental-legacy-report.pdf');
     } catch (e) {
       console.error('PDF export failed:', e);
@@ -99,7 +134,12 @@ export default function ExportButtons({ result, selectedDate }) {
         .map((f) => `"${f.name}",${f.mother.toFixed(3)},${f.father.toFixed(3)},${f.total.toFixed(3)}`)
         .join('\n');
       const totals = `\n"TOTAL",${result.motherTotal.toFixed(3)},${result.fatherTotal.toFixed(3)},${result.grandTotal.toFixed(3)}`;
-      const csv = BOM + headers + rows + totals;
+      const chakraHeaders = '\n\nCHAKRA LEVELS\nLife Factor,Current Status,Target Level,Gap to Goal\n';
+      const chakraRows = result.chakraLevels
+        .map((chakra) => `"${chakra.name}",${chakra.currentStatus.toFixed(3)},${chakra.targetLevel.toFixed(3)},${chakra.gapToGoal.toFixed(3)}`)
+        .join('\n');
+      const chakraTotals = `\n"TOTAL",${result.chakraCurrentTotal.toFixed(3)},${result.chakraTargetTotal.toFixed(3)},${result.chakraGapTotal.toFixed(3)}`;
+      const csv = BOM + headers + rows + totals + chakraHeaders + chakraRows + chakraTotals;
 
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
