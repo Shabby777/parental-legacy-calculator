@@ -152,6 +152,76 @@ export const ROOT_CHAKRA_FACTORS = [
   'Presence',
 ];
 
+export const SACRAL_CHAKRA_FACTORS = [
+  'Creativity',
+  'Emotion',
+  'Sensuality',
+  'Passion',
+  'Connection',
+  'Movement',
+  'Letting Go',
+];
+
+export const SOLAR_PLEXUS_CHAKRA_FACTORS = [
+  'Willpower',
+  'Purpose',
+  'Self-Esteem',
+  'Discipline',
+  'Digestion',
+  'Resilience',
+  'Ambition',
+];
+
+export const HEART_CHAKRA_FACTORS = [
+  'Love',
+  'Compassion',
+  'Forgiveness',
+  'Connection',
+  'Harmony',
+  'Healing',
+  'Altruism',
+];
+
+export const THROAT_CHAKRA_FACTORS = [
+  'Communication',
+  'Truth',
+  'Creativity',
+  'Listening',
+  'Purpose',
+  'Presence',
+  'Influence',
+];
+
+export const THIRD_EYE_CHAKRA_FACTORS = [
+  'Intuition',
+  'Clarity',
+  'Insight',
+  'Wisdom',
+  'Vision',
+  'Discernment',
+  'Realization',
+];
+
+export const CROWN_CHAKRA_FACTORS = [
+  'Enlightenment',
+  'Unity',
+  'Bliss',
+  'Service',
+  'Surrender',
+  'Completion',
+  'Eternity',
+];
+
+export const FOOD_SHEATH_FACTORS = [
+  'Nutrition',
+  'Structure',
+  'Sensation',
+  'Health',
+  'Activity',
+  'Rest',
+  'Mortality',
+];
+
 // Sum of all minimums = 47.121, sum of all maximums = 54.230
 // So Mother total ranges from ~47.1 to ~54.2, and same for Father.
 // Together Mother + Father can range from ~94.2 to ~108.5.
@@ -530,6 +600,128 @@ export function calculateFactors(dateOfBirth) {
   const rootChakraTargetTotal = rootChakra.reduce((sum, item) => sum + item.targetLevel, 0);
   const rootChakraGapTotal = rootChakra.reduce((sum, item) => sum + item.gapToGoal, 0);
 
+  // === Table 15: SACRAL CHAKRA ===
+  const baseSacral = factors[0].total * 0.74;
+  const sacralChakra = rootMults.map((mult, index) => {
+    const currentStatus = baseSacral * mult;
+    const targetLevel = currentStatus * 0.625;
+    const gapToGoal = targetLevel * 1.115;
+    return {
+      name: SACRAL_CHAKRA_FACTORS[index],
+      currentStatus,
+      targetLevel,
+      gapToGoal,
+    };
+  });
+  const sacralChakraCurrentTotal = sacralChakra.reduce((sum, item) => sum + item.currentStatus, 0);
+  const sacralChakraTargetTotal = sacralChakra.reduce((sum, item) => sum + item.targetLevel, 0);
+  const sacralChakraGapTotal = sacralChakra.reduce((sum, item) => sum + item.gapToGoal, 0);
+
+  // === Table 16: SOLAR PLEXUS CHAKRA ===
+  const solarTargetMults = [0.925, 0.825, 0.725, 0.705, 0.655, 0.695, 0.625];
+  const solarGapMults = [0.555, 0.595, 0.515, 0.475, 0.585, 0.455, 0.625];
+  const baseSolar = factors[0].total * 0.69;
+  const solarPlexusChakra = rootMults.map((mult, index) => {
+    const currentStatus = baseSolar * mult;
+    const targetLevel = currentStatus * solarTargetMults[index];
+    const gapToGoal = targetLevel * solarGapMults[index];
+    return {
+      name: SOLAR_PLEXUS_CHAKRA_FACTORS[index],
+      currentStatus,
+      targetLevel,
+      gapToGoal,
+    };
+  });
+  const solarPlexusChakraCurrentTotal = solarPlexusChakra.reduce((sum, item) => sum + item.currentStatus, 0);
+  const solarPlexusChakraTargetTotal = solarPlexusChakra.reduce((sum, item) => sum + item.targetLevel, 0);
+  const solarPlexusChakraGapTotal = solarPlexusChakra.reduce((sum, item) => sum + item.gapToGoal, 0);
+
+  // === Table 17: HEART CHAKRA ===
+  const baseHeart = factors[0].total * 0.84;
+  const heartChakra = rootMults.map((mult, index) => {
+    const currentStatus = baseHeart * mult;
+    const targetLevel = currentStatus * 0.625;
+    const gapToGoal = targetLevel * 1.115;
+    return {
+      name: HEART_CHAKRA_FACTORS[index],
+      currentStatus,
+      targetLevel,
+      gapToGoal,
+    };
+  });
+  const heartChakraCurrentTotal = heartChakra.reduce((sum, item) => sum + item.currentStatus, 0);
+  const heartChakraTargetTotal = heartChakra.reduce((sum, item) => sum + item.targetLevel, 0);
+  const heartChakraGapTotal = heartChakra.reduce((sum, item) => sum + item.gapToGoal, 0);
+
+  // === Table 18: THROAT CHAKRA ===
+  const baseThroat = factors[0].total * 0.87;
+  const throatChakra = rootMults.map((mult, index) => {
+    const currentStatus = baseThroat * mult;
+    const targetLevel = currentStatus * 0.625;
+    const gapToGoal = targetLevel * 1.115;
+    return {
+      name: THROAT_CHAKRA_FACTORS[index],
+      currentStatus,
+      targetLevel,
+      gapToGoal,
+    };
+  });
+  const throatChakraCurrentTotal = throatChakra.reduce((sum, item) => sum + item.currentStatus, 0);
+  const throatChakraTargetTotal = throatChakra.reduce((sum, item) => sum + item.targetLevel, 0);
+  const throatChakraGapTotal = throatChakra.reduce((sum, item) => sum + item.gapToGoal, 0);
+
+  // === Table 19: THIRD EYE CHAKRA ===
+  const baseThirdEye = factors[0].total * 0.81;
+  const thirdEyeChakra = rootMults.map((mult, index) => {
+    const currentStatus = baseThirdEye * mult;
+    const targetLevel = currentStatus * 0.625;
+    const gapToGoal = targetLevel * 1.115;
+    return {
+      name: THIRD_EYE_CHAKRA_FACTORS[index],
+      currentStatus,
+      targetLevel,
+      gapToGoal,
+    };
+  });
+  const thirdEyeChakraCurrentTotal = thirdEyeChakra.reduce((sum, item) => sum + item.currentStatus, 0);
+  const thirdEyeChakraTargetTotal = thirdEyeChakra.reduce((sum, item) => sum + item.targetLevel, 0);
+  const thirdEyeChakraGapTotal = thirdEyeChakra.reduce((sum, item) => sum + item.gapToGoal, 0);
+
+  // === Table 20: CROWN CHAKRA ===
+  const crownGapMults = [1.085, 1.095, 1.115, 1.115, 1.115, 1.115, 1.115];
+  const crownChakra = factors.map((factor, index) => {
+    const currentStatus = factor.total * 0.83;
+    const targetLevel = currentStatus * 0.625;
+    const gapToGoal = targetLevel * crownGapMults[index];
+    return {
+      name: CROWN_CHAKRA_FACTORS[index],
+      currentStatus,
+      targetLevel,
+      gapToGoal,
+    };
+  });
+  const crownChakraCurrentTotal = crownChakra.reduce((sum, item) => sum + item.currentStatus, 0);
+  const crownChakraTargetTotal = crownChakra.reduce((sum, item) => sum + item.targetLevel, 0);
+  const crownChakraGapTotal = crownChakra.reduce((sum, item) => sum + item.gapToGoal, 0);
+
+  // === Table 21: THE FOOD SHEATH ===
+  const foodGapMults = [1.10, 1.105, 1.095, 1.115, 1.115, 1.115, 1.115];
+  const baseFood = factors[0].total * 0.76;
+  const foodSheath = rootMults.map((mult, index) => {
+    const currentStatus = baseFood * mult;
+    const targetLevel = currentStatus * 0.625;
+    const gapToGoal = targetLevel * foodGapMults[index];
+    return {
+      name: FOOD_SHEATH_FACTORS[index],
+      currentStatus,
+      targetLevel,
+      gapToGoal,
+    };
+  });
+  const foodSheathCurrentTotal = foodSheath.reduce((sum, item) => sum + item.currentStatus, 0);
+  const foodSheathTargetTotal = foodSheath.reduce((sum, item) => sum + item.targetLevel, 0);
+  const foodSheathGapTotal = foodSheath.reduce((sum, item) => sum + item.gapToGoal, 0);
+
   return {
     factors,
     motherTotal,
@@ -588,6 +780,34 @@ export function calculateFactors(dateOfBirth) {
     rootChakraCurrentTotal,
     rootChakraTargetTotal,
     rootChakraGapTotal,
+    sacralChakra,
+    sacralChakraCurrentTotal,
+    sacralChakraTargetTotal,
+    sacralChakraGapTotal,
+    solarPlexusChakra,
+    solarPlexusChakraCurrentTotal,
+    solarPlexusChakraTargetTotal,
+    solarPlexusChakraGapTotal,
+    heartChakra,
+    heartChakraCurrentTotal,
+    heartChakraTargetTotal,
+    heartChakraGapTotal,
+    throatChakra,
+    throatChakraCurrentTotal,
+    throatChakraTargetTotal,
+    throatChakraGapTotal,
+    thirdEyeChakra,
+    thirdEyeChakraCurrentTotal,
+    thirdEyeChakraTargetTotal,
+    thirdEyeChakraGapTotal,
+    crownChakra,
+    crownChakraCurrentTotal,
+    crownChakraTargetTotal,
+    crownChakraGapTotal,
+    foodSheath,
+    foodSheathCurrentTotal,
+    foodSheathTargetTotal,
+    foodSheathGapTotal,
     dateOfBirth: dob.toISOString(),
     day,
   };

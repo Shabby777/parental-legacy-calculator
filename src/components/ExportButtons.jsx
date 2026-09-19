@@ -239,6 +239,55 @@ export default function ExportButtons({ result, selectedDate }) {
         result.rootChakraTargetTotal,
         result.rootChakraGapTotal,
       );
+      addLevelsPage(
+        'Sacral Chakra',
+        result.sacralChakra,
+        result.sacralChakraCurrentTotal,
+        result.sacralChakraTargetTotal,
+        result.sacralChakraGapTotal,
+      );
+      addLevelsPage(
+        'Solar Plexus Chakra',
+        result.solarPlexusChakra,
+        result.solarPlexusChakraCurrentTotal,
+        result.solarPlexusChakraTargetTotal,
+        result.solarPlexusChakraGapTotal,
+      );
+      addLevelsPage(
+        'Heart Chakra',
+        result.heartChakra,
+        result.heartChakraCurrentTotal,
+        result.heartChakraTargetTotal,
+        result.heartChakraGapTotal,
+      );
+      addLevelsPage(
+        'Throat Chakra',
+        result.throatChakra,
+        result.throatChakraCurrentTotal,
+        result.throatChakraTargetTotal,
+        result.throatChakraGapTotal,
+      );
+      addLevelsPage(
+        'Third Eye Chakra',
+        result.thirdEyeChakra,
+        result.thirdEyeChakraCurrentTotal,
+        result.thirdEyeChakraTargetTotal,
+        result.thirdEyeChakraGapTotal,
+      );
+      addLevelsPage(
+        'Crown Chakra',
+        result.crownChakra,
+        result.crownChakraCurrentTotal,
+        result.crownChakraTargetTotal,
+        result.crownChakraGapTotal,
+      );
+      addLevelsPage(
+        'The Food Sheath',
+        result.foodSheath,
+        result.foodSheathCurrentTotal,
+        result.foodSheathTargetTotal,
+        result.foodSheathGapTotal,
+      );
 
       pdf.save('parental-legacy-report.pdf');
     } catch (e) {
@@ -281,7 +330,14 @@ export default function ExportButtons({ result, selectedDate }) {
       const timeCsv = buildLevelsCsv('TIME (KALA) ELEMENT', result.timeElement, result.timeElementCurrentTotal, result.timeElementTargetTotal, result.timeElementGapTotal);
       const soulCsv = buildLevelsCsv('SOUL (ATMAN) ELEMENT', result.soulElement, result.soulElementCurrentTotal, result.soulElementTargetTotal, result.soulElementGapTotal);
       const rootChakraCsv = buildLevelsCsv('ROOT CHAKRA', result.rootChakra, result.rootChakraCurrentTotal, result.rootChakraTargetTotal, result.rootChakraGapTotal);
-      const csv = BOM + headers + rows + totals + chakraHeaders + chakraRows + chakraTotals + auraCsv + karmicCsv + karmicRefinementCsv + karmicBalancingCsv + earthCsv + waterCsv + fireCsv + airCsv + etherCsv + timeCsv + soulCsv + rootChakraCsv;
+      const sacralChakraCsv = buildLevelsCsv('SACRAL CHAKRA', result.sacralChakra, result.sacralChakraCurrentTotal, result.sacralChakraTargetTotal, result.sacralChakraGapTotal);
+      const solarPlexusChakraCsv = buildLevelsCsv('SOLAR PLEXUS CHAKRA', result.solarPlexusChakra, result.solarPlexusChakraCurrentTotal, result.solarPlexusChakraTargetTotal, result.solarPlexusChakraGapTotal);
+      const heartChakraCsv = buildLevelsCsv('HEART CHAKRA', result.heartChakra, result.heartChakraCurrentTotal, result.heartChakraTargetTotal, result.heartChakraGapTotal);
+      const throatChakraCsv = buildLevelsCsv('THROAT CHAKRA', result.throatChakra, result.throatChakraCurrentTotal, result.throatChakraTargetTotal, result.throatChakraGapTotal);
+      const thirdEyeChakraCsv = buildLevelsCsv('THIRD EYE CHAKRA', result.thirdEyeChakra, result.thirdEyeChakraCurrentTotal, result.thirdEyeChakraTargetTotal, result.thirdEyeChakraGapTotal);
+      const crownChakraCsv = buildLevelsCsv('CROWN CHAKRA', result.crownChakra, result.crownChakraCurrentTotal, result.crownChakraTargetTotal, result.crownChakraGapTotal);
+      const foodSheathCsv = buildLevelsCsv('THE FOOD SHEATH', result.foodSheath, result.foodSheathCurrentTotal, result.foodSheathTargetTotal, result.foodSheathGapTotal);
+      const csv = BOM + headers + rows + totals + chakraHeaders + chakraRows + chakraTotals + auraCsv + karmicCsv + karmicRefinementCsv + karmicBalancingCsv + earthCsv + waterCsv + fireCsv + airCsv + etherCsv + timeCsv + soulCsv + rootChakraCsv + sacralChakraCsv + solarPlexusChakraCsv + heartChakraCsv + throatChakraCsv + thirdEyeChakraCsv + crownChakraCsv + foodSheathCsv;
 
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);

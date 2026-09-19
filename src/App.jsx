@@ -198,6 +198,76 @@ function App() {
                 />
               </section>
 
+              <section>
+                <LevelsTable
+                  title="SACRAL CHAKRA"
+                  levels={result.sacralChakra}
+                  currentTotal={result.sacralChakraCurrentTotal}
+                  targetTotal={result.sacralChakraTargetTotal}
+                  gapTotal={result.sacralChakraGapTotal}
+                />
+              </section>
+
+              <section>
+                <LevelsTable
+                  title="SOLAR PLEXUS CHAKRA"
+                  levels={result.solarPlexusChakra}
+                  currentTotal={result.solarPlexusChakraCurrentTotal}
+                  targetTotal={result.solarPlexusChakraTargetTotal}
+                  gapTotal={result.solarPlexusChakraGapTotal}
+                />
+              </section>
+
+              <section>
+                <LevelsTable
+                  title="HEART CHAKRA"
+                  levels={result.heartChakra}
+                  currentTotal={result.heartChakraCurrentTotal}
+                  targetTotal={result.heartChakraTargetTotal}
+                  gapTotal={result.heartChakraGapTotal}
+                />
+              </section>
+
+              <section>
+                <LevelsTable
+                  title="THROAT CHAKRA"
+                  levels={result.throatChakra}
+                  currentTotal={result.throatChakraCurrentTotal}
+                  targetTotal={result.throatChakraTargetTotal}
+                  gapTotal={result.throatChakraGapTotal}
+                />
+              </section>
+
+              <section>
+                <LevelsTable
+                  title="THIRD EYE CHAKRA"
+                  levels={result.thirdEyeChakra}
+                  currentTotal={result.thirdEyeChakraCurrentTotal}
+                  targetTotal={result.thirdEyeChakraTargetTotal}
+                  gapTotal={result.thirdEyeChakraGapTotal}
+                />
+              </section>
+
+              <section>
+                <LevelsTable
+                  title="CROWN CHAKRA"
+                  levels={result.crownChakra}
+                  currentTotal={result.crownChakraCurrentTotal}
+                  targetTotal={result.crownChakraTargetTotal}
+                  gapTotal={result.crownChakraGapTotal}
+                />
+              </section>
+
+              <section>
+                <LevelsTable
+                  title="THE FOOD SHEATH"
+                  levels={result.foodSheath}
+                  currentTotal={result.foodSheathCurrentTotal}
+                  targetTotal={result.foodSheathTargetTotal}
+                  gapTotal={result.foodSheathGapTotal}
+                />
+              </section>
+
               {/* Charts */}
               <section>
                 <FactorChart result={result} />
